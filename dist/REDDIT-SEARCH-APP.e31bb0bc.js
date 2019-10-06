@@ -166,7 +166,7 @@ searchForm.addEventListener('submit', function (e) {
       var image = post.preview ? "<img src=\"".concat(post.preview.images[0].source.url, "\" class=\"card-img-top\" alt=\"reddit search image\">") : '';
       var d = new Date(post.created);
       var created = "".concat(d.getFullYear(), ".").concat(d.getMonth(), ".").concat(d.getDate());
-      output += "\n      <div class=\"card-column\">\n        <div class=\"card mb-3\">\n            ".concat(image, "\n            <div class=\"card-body\">\n              <h5 class=\"card-title\">").concat(post.title, "</h5>\n              <p class=\"card-text\">").concat(truncateText(post.selftext, 300), "</p>\n              <a href=\"").concat(post.url, "\" class=\"btn btn-primary\" target=\"_blank\">Read more</a>\n              <hr />\n              \n            </div>\n        </div>\n      </div>  \n    ");
+      output += "\n      <div class=\"card-column\">\n        <div class=\"card mb-3\">\n            ".concat(image, "\n            <div class=\"card-body\">\n              <h5 class=\"card-title\">").concat(post.title, "</h5>\n              <p class=\"card-text\">").concat(truncateText(post.selftext, 150), "</p>\n              <a href=\"").concat(post.url, "\" class=\"btn btn-outline-secondary\" target=\"_blank\">Read more</a>\n              <hr />\n              \n            </div>\n        </div>\n      </div>  \n    ");
     });
     document.getElementById('result').innerHTML = output;
   });
@@ -230,7 +230,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60823" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49382" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

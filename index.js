@@ -45,8 +45,8 @@ searchForm.addEventListener('submit', (e) => {
             ${image}
             <div class="card-body">
               <h5 class="card-title">${post.title}</h5>
-              <p class="card-text">${truncateText(post.selftext, 300)}</p>
-              <a href="${post.url}" class="btn btn-primary" target="_blank">Read more</a>
+              <p class="card-text">${truncateText(post.selftext, 150)}</p>
+              <a href="${post.url}" class="btn btn-outline-secondary" target="_blank">Read more</a>
               <hr />
               
             </div>
