@@ -1,0 +1,12 @@
+{
+  "name": "REDDIT-SEARCH-APP",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Rajju D Bajra",
+  "license": "ISC"
+}
