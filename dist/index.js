@@ -117,92 +117,74 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"redditapi.js":[function(require,module,exports) {
-"use strict";
+})({"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  search: function search(searchTerm, searchLimit, searchsort, ptime) {
-    console.log('searching....');
-    return fetch("https://www.reddit.com/search.json?q=".concat(searchTerm, "&limit=").concat(searchLimit, "&sort=").concat(searchsort)).then(function (respose) {
-      return respose.json();
-    }).then(function (data) {
-      return data.data.children.map(function (data) {
-        return data.data;
-      });
-    }).catch(function (err) {
-      return console.log(err);
-    });
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
   }
-};
-exports.default = _default;
-},{}],"index.js":[function(require,module,exports) {
-"use strict";
 
-var _redditapi = _interopRequireDefault(require("./redditapi"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-//ui select
-var searchForm = document.querySelector('#search-form'); // on submit run search
-
-searchForm.addEventListener('submit', function (e) {
-  var searchTerm = document.querySelector('#search-term').value;
-  var searchLimit = document.querySelector('#search-limit').value;
-  var searchSort = document.querySelector('input[name="sortby"]:checked').value; //alert if search term is empty
-
-  if (searchTerm === '') {
-    showMessage('Please enter search term', 'alert alert-danger');
-  } //run search function
-
-
-  _redditapi.default.search(searchTerm, searchLimit, searchSort).then(function (result) {
-    console.log(result);
-    var output = '';
-    result.forEach(function (post) {
-      var image = post.preview ? "<img src=\"".concat(post.preview.images[0].source.url, "\" class=\"card-img-top\" alt=\"reddit search image\">") : '';
-      var d = new Date(post.created);
-      var created = "".concat(d.getFullYear(), ".").concat(d.getMonth(), ".").concat(d.getDate());
-      output += "\n      <div class=\"card-column\">\n        <div class=\"card mb-3\">\n            ".concat(image, "\n            <div class=\"card-body\">\n              <h5 class=\"card-title\">").concat(post.title, "</h5>\n              <p class=\"card-text\">").concat(truncateText(post.selftext, 300), "</p>\n              <a href=\"").concat(post.url, "\" class=\"btn btn-primary\" target=\"_blank\">Read more</a>\n              <hr />\n              \n            </div>\n        </div>\n      </div>  \n    ");
-    });
-    document.getElementById('result').innerHTML = output;
-  });
-
-  e.preventDefault();
-}); //show alert message
-
-function showMessage(message, className) {
-  console.log('alert run'); //create div element
-
-  var div = document.createElement('div'); //add class to div element
-
-  div.className = "alert ".concat(className); //append message in to the div element
-
-  div.appendChild(document.createTextNode(message)); //ui to insert message after serch-form 
-
-  var searchBox = document.querySelector("#search-box"); //insert message inside search-container before search-form
-
-  searchForm.insertBefore(div, searchBox);
-  setTimeout(function () {
-    document.querySelector('.alert').remove();
-  }, 3000);
-} //trunkcate text
-
-
-function truncateText(text, count) {
-  var shortText = text.indexOf('', count);
-  if (shortText == -1) return text;
-  return text.substring(0, shortText);
-} //image insert
-
-
-function insertImage(image) {
-  return image ? "<img src=\"".concat(image, "\" class=\"card-img-top\" alt=\"reddit search image\">") : '';
+  return bundleURL;
 }
-},{"./redditapi":"redditapi.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -405,5 +387,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
-//# sourceMappingURL=/REDDIT-SEARCH-APP.e31bb0bc.js.map
+},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
+//# sourceMappingURL=/index.js.map

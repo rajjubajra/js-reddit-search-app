@@ -1,27 +1,72 @@
-import reddit from './reddit';
+import reddit from './redditapi';
+
+
+
 //ui select
 const searchForm = document.querySelector('#search-form');
+
+
+
 
 // on submit run search
 searchForm.addEventListener('submit', (e) => {
 
-  const inputSearch = document.querySelector('#search').value;
-  const limit = document.querySelector('#limit').value;
-  const sort = document.querySelector('input[name="sortby"]:checked').value;
+  const searchTerm = document.querySelector('#search-term').value;
+  const searchLimit = document.querySelector('#search-limit').value;
+  const searchSort = document.querySelector('input[name="sortby"]:checked').value;
+  
   
   //alert if search term is empty
-  if(inputSearch === ''){
+  if(searchTerm === ''){
     showMessage('Please enter search term', 'alert alert-danger');
   }
 
-  inputSearch.value = '';
 
-  reddit.search(inputSearch, sort, limit);
+  //run search function
+  reddit.search(searchTerm, searchLimit, searchSort)
+  .then(result => {
+    console.log(result);
+    let output = '';
+
+    result.forEach(function(post){
+
+      
+   
+      let image = post.preview 
+                  ? `<img src="${post.preview.images[0].source.url}" class="card-img-top" alt="reddit search image">`
+                  : '';
+
+      let d = new Date(post.created);
+      let created = `${d.getFullYear()}.${d.getMonth()}.${d.getDate()}`;
+  
+      output += `
+      <div class="card-column">
+        <div class="card mb-3">
+            ${image}
+            <div class="card-body">
+              <h5 class="card-title">${post.title}</h5>
+              <p class="card-text">${truncateText(post.selftext, 300)}</p>
+              <a href="${post.url}" class="btn btn-primary" target="_blank">Read more</a>
+              <hr />
+              
+            </div>
+        </div>
+      </div>  
+    `;
+    
+   
+    })
+    document.getElementById('result').innerHTML = output;
+  
+  })
+  
   
   e.preventDefault();
 })
 
 
+
+//show alert message
 function showMessage(message, className){
   console.log('alert run');
   //create div element
@@ -39,4 +84,17 @@ function showMessage(message, className){
   setTimeout(function(){
     document.querySelector('.alert').remove();
   },3000)
+}
+
+
+//trunkcate text
+function truncateText(text, count){
+  let shortText = text.indexOf('', count);
+  if(shortText == -1) return text;
+  return text.substring(0, shortText);
+}
+
+//image insert
+function insertImage(image){
+  return image ? `<img src="${image}" class="card-img-top" alt="reddit search image">`: '';
 }
